@@ -1,19 +1,19 @@
-const path = require('path')
-const webpack = require('webpack')
-const CopyPlugin = require('copy-webpack-plugin')
-const VueLoaderPlugin = require('vue-loader/lib/plugin')
-const ROOT_PATH = path.resolve(__dirname)
-const BUILD_PATH = path.resolve(ROOT_PATH, 'public') // 修改为 public 目录
-const version = require('./package.json').version
-const TerserPlugin = require('terser-webpack-plugin')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const path = require('path');
+const webpack = require('webpack');
+const CopyPlugin = require('copy-webpack-plugin');
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const ROOT_PATH = path.resolve(__dirname);
+const BUILD_PATH = path.resolve(ROOT_PATH, 'public'); // 修改为 public 目录
+const version = require('./package.json').version;
+const TerserPlugin = require('terser-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const banner =
   'Twikoo v' + version + '\n' +
   '(c) 2020-' + new Date().getFullYear() + ' iMaeGoo\n' +
   'Released under the MIT License.\n' +
-  'Last Update: ' + (new Date()).toLocaleString()
+  'Last Update: ' + new Date().toLocaleString();
 
-function getConfig ({ extractCss }) {
+function getConfig({ extractCss }) {
   return {
     module: {
       rules: [
@@ -34,7 +34,7 @@ function getConfig ({ extractCss }) {
           'twikoo.all': './src/client/main.all.js'
         },
     output: {
-      path: BUILD_PATH, // 输出路径改为 public
+      path: BUILD_PATH, // 确保输出路径为 public
       filename: extractCss ? '[name].nocss.js' : '[name].min.js',
       library: 'twikoo',
       libraryTarget: 'umd',
@@ -45,7 +45,7 @@ function getConfig ({ extractCss }) {
       new webpack.BannerPlugin(banner),
       new CopyPlugin({
         patterns: [
-          { from: 'demo/', to: './' }
+          { from: 'demo/', to: BUILD_PATH } // 确保 demo 文件复制到 public 目录
         ]
       }),
       new VueLoaderPlugin(),
@@ -77,7 +77,7 @@ function getConfig ({ extractCss }) {
       maxEntrypointSize: 524288,
       maxAssetSize: 524288
     }
-  }
+  };
 }
 
 module.exports = process.env.NODE_ENV === 'production'
@@ -85,4 +85,4 @@ module.exports = process.env.NODE_ENV === 'production'
       getConfig({ extractCss: false }),
       getConfig({ extractCss: true })
     ]
-  : getConfig({ extractCss: false })
+  : getConfig({ extractCss: false });
