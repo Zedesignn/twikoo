@@ -3,7 +3,7 @@ const webpack = require('webpack')
 const CopyPlugin = require('copy-webpack-plugin')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const ROOT_PATH = path.resolve(__dirname)
-const BUILD_PATH = path.resolve(ROOT_PATH, 'dist')
+const BUILD_PATH = path.resolve(ROOT_PATH, 'public') // 修改为 public 目录
 const version = require('./package.json').version
 const TerserPlugin = require('terser-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
@@ -34,7 +34,7 @@ function getConfig ({ extractCss }) {
           'twikoo.all': './src/client/main.all.js'
         },
     output: {
-      path: BUILD_PATH,
+      path: BUILD_PATH, // 输出路径改为 public
       filename: extractCss ? '[name].nocss.js' : '[name].min.js',
       library: 'twikoo',
       libraryTarget: 'umd',
@@ -63,7 +63,7 @@ function getConfig ({ extractCss }) {
     devServer: {
       static: [{
         directory: BUILD_PATH,
-        publicPath: '/dist/',
+        publicPath: '/public/',
         serveIndex: true,
         watch: true
       }],
